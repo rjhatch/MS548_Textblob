@@ -1,4 +1,4 @@
-from formatting import *
+from output import *
 from userinput import CaptureTextFromTheUser
 
 
@@ -40,7 +40,7 @@ class Menu:
             return "QUIT"
 
         self.menu_items[selection].function(CaptureTextFromTheUser(self.menu_items[selection].descriptive_text()),
-                                            "Hello")
+                                            self.menu_items[selection].name())
 
 
 class MenuItem:

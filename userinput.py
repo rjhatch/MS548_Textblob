@@ -1,4 +1,4 @@
-from formatting import *
+from output import *
 from textblob import TextBlob
 
 

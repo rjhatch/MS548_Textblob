@@ -1,8 +1,10 @@
 # Richie Hatch
 # MS548 - Module 2 - Due 3/21/2021
-# Estimate - 6 hours /  hours actual
+# Estimate - 6 hours / 5 hours actual
 # 3/30/2021 - 1 hours
-# 3/31/2021 - 2 hours
+# 3/31/2021 - 4 hours
+# There was a ton of refactoring in this iteration. The functionality of the dictionary and writing to a file
+# really wasn't too difficult. Breaking apart the program for it to be easier to extent was the more difficult portion.
 
 
 # used to exit the application
@@ -13,7 +15,7 @@ from textblob import Word
 
 import menu
 from userinput import *
-from formatting import *
+from output import *
 
 
 def ExtractAndPrintNouns(text, title):
@@ -23,9 +25,12 @@ def ExtractAndPrintNouns(text, title):
 
     clear_screen()
     PrintHeader(title)
-    print("Here are the nouns: \n")
+
+    print_and_write("Here is what you provided: " + text.string)
+
+    print_and_write("Here are the nouns: \n")
     for noun in text.noun_phrases:
-        print(noun)
+        print_and_write(noun)
 
     print_footer(title)
 
@@ -37,14 +42,14 @@ def ExtractAndPrintSentiment(text, title):
 
     clear_screen()
     PrintHeader(title)
-    print("Here is what you provided: " + text.string)
-    print("This is the sentiment: ", end=" ")
+    print_and_write("Here is what you provided: " + text.string)
+    print_and_write("This is the sentiment: ", end=" ")
     if text.sentiment.polarity < .4:
-        print("Woah! That's pretty negative.")
+        print_and_write("Woah! That's pretty negative.")
     elif .4 <= text.sentiment.polarity < .6:
-        print("That's a relatively neutral statement.")
+        print_and_write("That's a relatively neutral statement.")
     else:
-        print("That's really positive!")
+        print_and_write("That's really positive!")
 
     print_footer(title)
 
@@ -54,30 +59,35 @@ def ExtractAndPrintWordTags(text, title):
     tags = text.tags
     tag_list = []
 
+    print_and_write("Here is what you provided: " + text.string)
+
     for tag in tags:
         if tag[1] not in tag_list:
             tag_list.append(tag[1])
 
     for tagName in tag_list:
-        print(tagName + ": ", end=" ")
+        print_and_write(tagName + ": ", end=" ")
         word_list = []
         for tag in tags:
             if tag[1] == tagName:
                 word_list.append(tag[0])
         for word in word_list:
             if word_list.index(word) == len(word_list) - 1:
-                print(word + ".")
+                print_and_write(word + ".")
             else:
-                print(word + ",", end=" ")
+                print_and_write(word + ",", end=" ")
 
     print_footer(title)
 
 
 def PluralizeAndPrint(text, title):
     PrintHeader(title)
+
+    print_and_write("Here is what you provided: " + text.string)
+
     for word in text.words:
         w = Word(word)
-        print(w.pluralize())
+        print_and_write(w.pluralize())
 
     print_footer(title)
 
