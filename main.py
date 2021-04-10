@@ -1,30 +1,28 @@
 # Richie Hatch
 # MS548 - Module 2 - Due 3/21/2021
-# Estimate - 6 hours / 5 hours actual
-# 3/30/2021 - 1 hours
-# 3/31/2021 - 4 hours
-# There was a ton of refactoring in this iteration. The functionality of the dictionary and writing to a file
-# really wasn't too difficult. Breaking apart the program for it to be easier to extent was the more difficult portion.
+# Estimate - 2 hours / 2 hours actual
+# 4/9/2021 - 2 hours
+# I was able to hit the projected time.
 
 
 # used to exit the application
 import sys
 
 # requirement from the assignment
-from textblob import Word
+from textblob import Word, TextBlob
 
 import menu
 from userinput import *
 from output import *
 
 
-def ExtractAndPrintNouns(text, title):
+def extract_and_print_nouns(text, title):
     """Extracts the nouns and prints them.
 
     Given some text extract the nouns and print them."""
 
     clear_screen()
-    PrintHeader(title)
+    print_header(title)
 
     print_and_write("Here is what you provided: " + text.string)
 
@@ -35,13 +33,13 @@ def ExtractAndPrintNouns(text, title):
     print_footer(title)
 
 
-def ExtractAndPrintSentiment(text, title):
+def extract_and_print_sentiment(text, title):
     """Prints the sentiment of the provided text.
 
     Given the polarity of the statement, one of three states is returned."""
 
     clear_screen()
-    PrintHeader(title)
+    print_header(title)
     print_and_write("Here is what you provided: " + text.string)
     print_and_write("This is the sentiment: ", end=" ")
     if text.sentiment.polarity < .4:
@@ -54,8 +52,11 @@ def ExtractAndPrintSentiment(text, title):
     print_footer(title)
 
 
-def ExtractAndPrintWordTags(text, title):
-    PrintHeader(title)
+def extract_and_print_word_tags(text, title):
+    """Helper method to write to a file and display to the screen.
+
+    Get use end= to determine what the end of the string is."""
+    print_header(title)
     tags = text.tags
     tag_list = []
 
@@ -80,8 +81,11 @@ def ExtractAndPrintWordTags(text, title):
     print_footer(title)
 
 
-def PluralizeAndPrint(text, title):
-    PrintHeader(title)
+def pluralize_and_print(text, title):
+    """Pluralize the given text
+
+    Pluralize and print the given text."""
+    print_header(title)
 
     print_and_write("Here is what you provided: " + text.string)
 
@@ -92,16 +96,71 @@ def PluralizeAndPrint(text, title):
     print_footer(title)
 
 
+def correct_spelling(text, title):
+    """Correct spelling of the given text
+
+    Corrects and prints the text provided."""
+    print_header(title)
+
+    print_and_write("Here is what you provided: " + text.string)
+
+    print_and_write(text.correct())
+
+    print_footer(title)
+
+
+def word_and_noun_frequencies(text, title):
+    """Print how many times a word appears.
+
+    Given text and a word print how many times the word appears."""
+    print_header(title)
+
+    print_and_write("Here is what you provided: " + text.string)
+
+    word_choice = input("\nEnter a word and I'll find the frequency: ")
+
+    print_and_write("You want me to find the frequency of the word: " + word_choice)
+
+    print_and_write(text.word_counts[word_choice])
+
+    print_footer(title)
+
+
+def check_spelling(text, title):
+    """Check for spelling errors.
+
+    Given text, check the spelling and print the probability of word suggestions."""
+    print_header(title)
+
+    print_and_write("Here is what you provided: " + text.string)
+
+    print_and_write("Here is the probability of correct spelling and suggestions if needed: ")
+
+    # tokenization from the text blob library
+    words = text.words
+
+    for word in words:
+        print_and_write(Word(word).spellcheck())
+
+    print_footer(title)
+
+
 menu = menu.Menu()
 menu.add_menu_item("Sentiment", "Provide the sentiment for a selection of text.",
-                   "Enter text, let's see if I can figure out if it's positive or negative.", ExtractAndPrintSentiment)
+                   "Enter text, let's see if I can figure out if it's positive or negative.",
+                   extract_and_print_sentiment)
 menu.add_menu_item("The Nouns", "Pick out the nouns from a selection of text.",
-                   "Enter text, include nouns so I can pick them out!", ExtractAndPrintNouns)
+                   "Enter text, include nouns so I can pick them out!", extract_and_print_nouns)
 menu.add_menu_item("Word Tags", "Breakdown text by word type.",
-                   "Enter text, I'll tell you what each word is.", ExtractAndPrintWordTags)
+                   "Enter text, I'll tell you what each word is.", extract_and_print_word_tags)
 menu.add_menu_item("Pluralize", "Pluralize.",
-                   "Enter text, I'll pluralize it.", PluralizeAndPrint)
-
+                   "Enter text, I'll pluralize it.", pluralize_and_print)
+menu.add_menu_item("Word Frequency", "Check word frequency",
+                   "Enter a sentence or sentences and then I'll ask for a word to check.", word_and_noun_frequencies)
+menu.add_menu_item("Spell Check", "Check Spelling",
+                   "Enter text and I'll check the spelling of each word.", check_spelling)
+menu.add_menu_item("Correct Spelling", "Correct Spelling",
+                   "Enter text and I'll try to correct any spelling mistakes.", correct_spelling)
 
 while 1:
     # Menu()

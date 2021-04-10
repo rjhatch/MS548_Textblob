@@ -6,7 +6,7 @@ def clear_screen():
     system("cls")
 
 
-def PrintHeader(header):
+def print_header(header):
     print_and_write("--------" + header + "--------")
 
 
@@ -20,6 +20,6 @@ def print_footer(footer):
 
 
 def print_and_write(statement, end="\n"):
-    print(statement, end=end)
+    print(str(statement), end=end)
     write_file = FileWrite("output.txt")
-    write_file.file_append(statement + end)
+    write_file.file_append(str(statement) + end)
